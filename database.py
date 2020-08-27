@@ -74,7 +74,7 @@ class Database:
             g_names = [str(k) for k in curr_db]
             ratios = process.extract(query, g_names, limit=100)
             sorted_ratios = sorted(ratios, key=lambda x: x[1], reverse=True)
-            return [item[0] for item in sorted_ratios]
+            return [(item[0], system) for item in sorted_ratios]
     
     def query_all_systems(self, query: str) -> list:
         all_ratios = []
@@ -82,10 +82,12 @@ class Database:
             curr_db = self._databases[system]
             g_names = [str(k) for k in curr_db]
             ratios = process.extract(query, g_names, limit=20)
-            ratios = list(map(lambda x: (x[0]+' - '+system, x[1]), ratios))
+            ratios = list(map(lambda x: (x[0], x[1], system), ratios))
             all_ratios.extend(ratios)
         sorted_ratios = sorted(all_ratios, key=lambda x: x[1], reverse=True)
-        return [item[0] for item in sorted_ratios]
+        return [(item[0], item[2]) for item in sorted_ratios]
         
-        
+    def get_crc32(self, system: str, game: str):
+        curr_db = self._databases.get(system, {})
+        return curr_db.get(game, None)
     
