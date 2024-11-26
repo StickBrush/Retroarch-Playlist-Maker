@@ -79,7 +79,7 @@ class Playlist:
             self._logger.warning("Overwriting file {}".format(playlist_fname))
         os.makedirs(os.path.dirname(playlist_fname), exist_ok=True)
         db_name = os.path.split(playlist_fname)[-1]
-        if not self.ITEMS_KEY in self._inner_pl:
+        if self.ITEMS_KEY not in self._inner_pl:
             self._inner_pl[self.ITEMS_KEY] = []
         for game in self._games:
             game.db_name = db_name
